@@ -1,7 +1,8 @@
-import type { CheerioAPI } from "cheerio";
+import type { Cheerio, CheerioAPI } from "cheerio";
+import type { AnyNode } from "domhandler";
 import type { AccessibilityIssue, AccessibilityReport } from "../types";
 
-function textContent(node: ReturnType<CheerioAPI["load"]>[number]): string {
+function textContent(node: Cheerio<AnyNode>): string {
   return node.text().replace(/\s+/g, " ").trim();
 }
 
@@ -83,7 +84,7 @@ export function runAccessibilityCheck($: CheerioAPI): AccessibilityReport {
 
   const headingLevels = $("h1, h2, h3, h4, h5, h6")
     .toArray()
-    .map((el) => Number($(el).prop("tagName").toLowerCase().replace("h", "")));
+    .map((el) => Number(String($(el).prop("tagName") ?? "").toLowerCase().replace("h", "")));
 
   let previousLevel = 0;
   for (const level of headingLevels) {

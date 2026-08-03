@@ -16,6 +16,7 @@
 import * as cheerio from "cheerio";
 
 import { fetchPage } from "@/lib/checks/page";
+import { runContentSeoQualityCheck } from "@/lib/checks/content-seo";
 import { runImageCheck } from "@/lib/checks/images";
 import { runLinkCheck } from "@/lib/checks/links";
 import { runPageSpeed } from "@/lib/checks/performance";
@@ -26,6 +27,7 @@ import { resolveUrl } from "@/lib/url";
 import type {
   AccessibilityReport,
   AuditReport,
+  ContentSeoQualityReport,
   HtmlReport,
   ImagesReport,
   LinksReport,
@@ -54,6 +56,7 @@ function settledToSection<T>(settled: PromiseSettledResult<T>): SectionResult<T>
 interface ContentBranch {
   page: SectionResult<PageInfo>;
   seo: SectionResult<SeoReport>;
+  contentSeo: SectionResult<ContentSeoQualityReport>;
   images: SectionResult<ImagesReport>;
   links: SectionResult<LinksReport>;
   html: SectionResult<HtmlReport>;
@@ -75,6 +78,7 @@ async function runContentChecks(url: string): Promise<ContentBranch> {
     return {
       page: fail(message),
       seo: fail(message),
+      contentSeo: fail(message),
       images: fail(message),
       links: fail(message),
       html: fail(message),
@@ -87,8 +91,9 @@ async function runContentChecks(url: string): Promise<ContentBranch> {
   const baseHref = $("base[href]").first().attr("href");
   const baseUrl = (baseHref ? resolveUrl(baseHref, info.finalUrl) : null) ?? info.finalUrl;
 
-  const [seo, images, links, accessibility] = await Promise.allSettled([
+  const [seo, contentSeo, images, links, accessibility] = await Promise.allSettled([
     runSeoCheck($, baseUrl),
+    Promise.resolve(runContentSeoQualityCheck($, baseUrl)),
     Promise.resolve(runImageCheck($, baseUrl)),
     runLinkCheck($, baseUrl),
     Promise.resolve(runAccessibilityCheck($)),
@@ -99,6 +104,7 @@ async function runContentChecks(url: string): Promise<ContentBranch> {
   return {
     page: ok(info),
     seo: settledToSection(seo),
+    contentSeo: settledToSection(contentSeo),
     images: settledToSection(images),
     links: settledToSection(links),
     html: ok(htmlReport),
@@ -130,6 +136,7 @@ export async function runAudit(url: string): Promise<AuditReport> {
       desktop: settledToSection(performance[1]),
     },
     seo: content.seo,
+    contentSeo: content.contentSeo,
     images: content.images,
     links: content.links,
     html: content.html,
