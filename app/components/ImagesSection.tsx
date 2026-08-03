@@ -1,4 +1,5 @@
 import type { ImagesReport, SectionResult } from "@/lib/types";
+import RecommendedFixButton from "./RecommendedFixButton";
 import { Card, EmptyNote, Pill } from "./ui";
 
 function Stat({ label, value, status }: { label: string; value: number; status: "pass" | "warn" | "fail" }) {
@@ -13,7 +14,13 @@ function Stat({ label, value, status }: { label: string; value: number; status: 
   );
 }
 
-export default function ImagesSection({ images }: { images: SectionResult<ImagesReport> }) {
+export default function ImagesSection({
+  images,
+  pageUrl,
+}: {
+  images: SectionResult<ImagesReport>;
+  pageUrl: string;
+}) {
   const report = images.data;
   const flagged = report?.items.filter((item) => item.issues.length > 0) ?? [];
 
@@ -61,6 +68,16 @@ export default function ImagesSection({ images }: { images: SectionResult<Images
                               </li>
                             ))}
                           </ul>
+                          <RecommendedFixButton
+                            context={{
+                              category: "Images",
+                              label: "Image hygiene issue",
+                              status: "warn",
+                              detail: item.issues.join("; "),
+                              value: item.src,
+                              pageUrl,
+                            }}
+                          />
                         </td>
                       </tr>
                     ))}

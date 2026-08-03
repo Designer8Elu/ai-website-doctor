@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { validateHtmlDocument } from "./html.ts";
+import { validateHtmlDocument } from "./html";
 
 test("accepts well-formed HTML with doctype and required structure", () => {
   const report = validateHtmlDocument(`<!DOCTYPE html>

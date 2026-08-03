@@ -78,6 +78,36 @@ export interface SeoReport {
 }
 
 /* ------------------------------------------------------------------ *
+ * Content / SEO quality
+ * ------------------------------------------------------------------ */
+
+export interface ContentSeoQualityCheck {
+  id: string;
+  label: string;
+  status: CheckStatus;
+  value: string | null;
+  detail: string;
+}
+
+export interface StructuredDataItem {
+  type: string;
+  valid: boolean;
+  issue: string | null;
+}
+
+export interface ContentSeoQualityReport {
+  checks: ContentSeoQualityCheck[];
+  passed: number;
+  warned: number;
+  failed: number;
+  wordCount: number;
+  h1Count: number;
+  h1Texts: string[];
+  noindex: boolean;
+  structuredData: StructuredDataItem[];
+}
+
+/* ------------------------------------------------------------------ *
  * Images
  * ------------------------------------------------------------------ */
 
@@ -187,6 +217,7 @@ export interface AuditReport {
   page: SectionResult<PageInfo>;
   performance: PerformanceReport;
   seo: SectionResult<SeoReport>;
+  contentSeo: SectionResult<ContentSeoQualityReport>;
   images: SectionResult<ImagesReport>;
   links: SectionResult<LinksReport>;
   html: SectionResult<HtmlReport>;

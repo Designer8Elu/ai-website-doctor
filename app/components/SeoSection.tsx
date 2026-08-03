@@ -1,7 +1,14 @@
 import type { SectionResult, SeoReport } from "@/lib/types";
+import RecommendedFixButton from "./RecommendedFixButton";
 import { Card, Pill, StatusIcon } from "./ui";
 
-export default function SeoSection({ seo }: { seo: SectionResult<SeoReport> }) {
+export default function SeoSection({
+  seo,
+  pageUrl,
+}: {
+  seo: SectionResult<SeoReport>;
+  pageUrl: string;
+}) {
   const report = seo.data;
 
   return (
@@ -34,6 +41,18 @@ export default function SeoSection({ seo }: { seo: SectionResult<SeoReport> }) {
                     <p className="break-anywhere mt-1 rounded bg-slate-50 px-2 py-1 font-mono text-xs text-slate-600">
                       {check.value}
                     </p>
+                  ) : null}
+                  {check.status !== "pass" ? (
+                    <RecommendedFixButton
+                      context={{
+                        category: "SEO tags",
+                        label: check.label,
+                        status: check.status,
+                        detail: check.detail,
+                        value: check.value,
+                        pageUrl,
+                      }}
+                    />
                   ) : null}
                 </div>
               </li>
