@@ -28,7 +28,7 @@ function LinkRow({ link }: { link: LinkResult }) {
   );
 }
 
-export default function LinksSection({ links }: { links: SectionResult<LinksReport> }) {
+export default function LinksSection({ links, pageUrl }: { links: SectionResult<LinksReport>; pageUrl: string }) {
   const report = links.data;
   const broken = report?.broken ?? [];
 

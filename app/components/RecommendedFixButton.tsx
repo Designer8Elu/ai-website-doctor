@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+
+import { buildFixDraft } from "@/lib/fix-draft";
 
 export interface RecommendedFixContext {
   category: string;
@@ -16,6 +18,9 @@ export default function RecommendedFixButton({ context }: { context: Recommended
   const [recommendation, setRecommendation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [applied, setApplied] = useState(false);
+
+  const draft = useMemo(() => buildFixDraft(context), [context]);
 
   async function loadRecommendation() {
     if (loading) return;
@@ -59,6 +64,11 @@ export default function RecommendedFixButton({ context }: { context: Recommended
     }
   }
 
+  function applyDraft() {
+    setApplied(true);
+    setRecommendation(`${draft.summary}\n\nSuggested patch:\n${draft.patch}\n\nNotes:\n${draft.notes.join("\n")}`);
+  }
+
   const open = Boolean(recommendation || error);
 
   return (
@@ -90,6 +100,13 @@ export default function RecommendedFixButton({ context }: { context: Recommended
               ) : null}
               <button
                 type="button"
+                onClick={applyDraft}
+                className="rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100"
+              >
+                {applied ? "Applied draft" : "Apply Fix"}
+              </button>
+              <button
+                type="button"
                 onClick={() => {
                   setRecommendation(null);
                   setError(null);
@@ -104,9 +121,17 @@ export default function RecommendedFixButton({ context }: { context: Recommended
           {error ? (
             <p className="mt-3 text-sm text-red-700">{error}</p>
           ) : (
-            <pre className="mt-3 whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-slate-700">
-              {recommendation}
-            </pre>
+            <div className="mt-3 space-y-3">
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Suggested patch</p>
+                <pre className="mt-2 whitespace-pre-wrap break-words font-mono text-sm leading-relaxed text-slate-700">
+                  {draft.patch}
+                </pre>
+              </div>
+              <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-slate-700">
+                {recommendation}
+              </pre>
+            </div>
           )}
         </div>
       ) : null}

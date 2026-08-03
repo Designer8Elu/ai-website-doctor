@@ -3,8 +3,10 @@ import { Card, EmptyNote, Pill } from "./ui";
 
 export default function AccessibilitySection({
   accessibility,
+  pageUrl,
 }: {
   accessibility: SectionResult<AccessibilityReport>;
+  pageUrl: string;
 }) {
   const report = accessibility.data;
 

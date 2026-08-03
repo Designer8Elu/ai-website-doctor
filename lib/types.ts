@@ -199,6 +199,47 @@ export interface AccessibilityReport {
 }
 
 /* ------------------------------------------------------------------ *
+ * Security headers
+ * ------------------------------------------------------------------ */
+
+export interface SecurityHeadersIssue {
+  label: string;
+  detail: string;
+  status: CheckStatus;
+}
+
+export interface SecurityHeadersReport {
+  issues: SecurityHeadersIssue[];
+  passed: number;
+  warned: number;
+  failed: number;
+}
+
+/* ------------------------------------------------------------------ *
+ * Structured data / schema validation
+ * ------------------------------------------------------------------ */
+
+export interface StructuredDataIssue {
+  label: string;
+  detail: string;
+  status: CheckStatus;
+}
+
+export interface StructuredDataItem {
+  type: string;
+  valid: boolean;
+  issue: string | null;
+}
+
+export interface StructuredDataReport {
+  items: StructuredDataItem[];
+  issues: StructuredDataIssue[];
+  passed: number;
+  warned: number;
+  failed: number;
+}
+
+/* ------------------------------------------------------------------ *
  * Top level report
  * ------------------------------------------------------------------ */
 
@@ -207,6 +248,7 @@ export interface PageInfo {
   status: number;
   contentType: string | null;
   htmlBytes: number;
+  headers: Record<string, string>;
 }
 
 export interface AuditReport {
@@ -222,6 +264,8 @@ export interface AuditReport {
   links: SectionResult<LinksReport>;
   html: SectionResult<HtmlReport>;
   accessibility: SectionResult<AccessibilityReport>;
+  security: SectionResult<SecurityHeadersReport>;
+  structuredData: SectionResult<StructuredDataReport>;
 
   /* FUTURE MODULES — see lib/audit.ts for the plug-in points:
    * codeAudit:       SectionResult<CodeAuditReport>   (unused CSS, minification, console errors)

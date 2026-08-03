@@ -3,8 +3,10 @@ import { Card, EmptyNote, Pill } from "./ui";
 
 export default function HtmlSection({
   html,
+  pageUrl,
 }: {
   html: SectionResult<HtmlReport>;
+  pageUrl: string;
 }) {
   const report = html.data;
 

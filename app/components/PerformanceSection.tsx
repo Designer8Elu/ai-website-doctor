@@ -55,7 +55,7 @@ function Suggestions({ report }: { report: StrategyReport }) {
   );
 }
 
-export default function PerformanceSection({ performance }: { performance: PerformanceReport }) {
+export default function PerformanceSection({ performance, pageUrl }: { performance: PerformanceReport; pageUrl: string }) {
   const [strategy, setStrategy] = useState<Strategy>("mobile");
 
   const active = performance[strategy];

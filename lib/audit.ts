@@ -23,6 +23,8 @@ import { runPageSpeed } from "@/lib/checks/performance";
 import { runSeoCheck } from "@/lib/checks/seo";
 import { validateHtmlDocument } from "@/lib/checks/html";
 import { runAccessibilityCheck } from "@/lib/checks/accessibility";
+import { runSecurityHeadersCheck } from "@/lib/checks/security";
+import { runStructuredDataCheck } from "@/lib/checks/structured-data";
 import { resolveUrl } from "@/lib/url";
 import type {
   AccessibilityReport,
@@ -33,7 +35,9 @@ import type {
   LinksReport,
   PageInfo,
   SectionResult,
+  SecurityHeadersReport,
   SeoReport,
+  StructuredDataReport,
 } from "@/lib/types";
 
 function ok<T>(data: T): SectionResult<T> {
@@ -61,6 +65,8 @@ interface ContentBranch {
   links: SectionResult<LinksReport>;
   html: SectionResult<HtmlReport>;
   accessibility: SectionResult<AccessibilityReport>;
+  security: SectionResult<SecurityHeadersReport>;
+  structuredData: SectionResult<StructuredDataReport>;
 }
 
 /** Fetch the HTML once, then run everything that reads from it. */
@@ -83,6 +89,8 @@ async function runContentChecks(url: string): Promise<ContentBranch> {
       links: fail(message),
       html: fail(message),
       accessibility: fail(message),
+      security: fail(message),
+      structuredData: fail(message),
     };
   }
 
@@ -91,12 +99,14 @@ async function runContentChecks(url: string): Promise<ContentBranch> {
   const baseHref = $("base[href]").first().attr("href");
   const baseUrl = (baseHref ? resolveUrl(baseHref, info.finalUrl) : null) ?? info.finalUrl;
 
-  const [seo, contentSeo, images, links, accessibility] = await Promise.allSettled([
+  const [seo, contentSeo, images, links, accessibility, security, structuredData] = await Promise.allSettled([
     runSeoCheck($, baseUrl),
     Promise.resolve(runContentSeoQualityCheck($, baseUrl)),
     Promise.resolve(runImageCheck($, baseUrl)),
     runLinkCheck($, baseUrl),
     Promise.resolve(runAccessibilityCheck($)),
+    Promise.resolve(runSecurityHeadersCheck(info.headers)),
+    Promise.resolve(runStructuredDataCheck($)),
   ]);
 
   const htmlReport = validateHtmlDocument(html);
@@ -109,6 +119,8 @@ async function runContentChecks(url: string): Promise<ContentBranch> {
     links: settledToSection(links),
     html: ok(htmlReport),
     accessibility: settledToSection(accessibility),
+    security: settledToSection(security),
+    structuredData: settledToSection(structuredData),
   };
 }
 
@@ -141,5 +153,7 @@ export async function runAudit(url: string): Promise<AuditReport> {
     links: content.links,
     html: content.html,
     accessibility: content.accessibility,
+    security: content.security,
+    structuredData: content.structuredData,
   };
 }
