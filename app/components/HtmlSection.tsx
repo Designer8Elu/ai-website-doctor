@@ -30,19 +30,19 @@ export default function HtmlSection({
       {report ? (
         <div className="space-y-3">
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
               <p className="text-xs font-medium text-slate-500">Doctype</p>
               <p className="mt-1 text-sm font-semibold text-slate-900">
                 {report.doctypePresent ? "Present" : "Missing"}
               </p>
             </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
               <p className="text-xs font-medium text-slate-500">&lt;html&gt;</p>
               <p className="mt-1 text-sm font-semibold text-slate-900">
                 {report.hasHtmlTag ? "Present" : "Missing"}
               </p>
             </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
               <p className="text-xs font-medium text-slate-500">Body/head</p>
               <p className="mt-1 text-sm font-semibold text-slate-900">
                 {report.hasHeadTag && report.hasBodyTag
@@ -52,7 +52,7 @@ export default function HtmlSection({
             </div>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+          <div className="rounded-lg border border-gray-200 bg-white-50 p-3">
             <p className="text-sm font-semibold text-slate-900">
               Heading hierarchy
             </p>

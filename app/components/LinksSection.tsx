@@ -66,11 +66,11 @@ export default function LinksSection({ links, pageUrl }: { links: SectionResult<
               </div>
             )}
 
-            <details className="rounded-lg border border-slate-200">
+            <details className="rounded-lg border border-gray-200">
               <summary className="cursor-pointer px-3 py-2 text-sm font-medium text-slate-700 select-none">
                 All {report.checked} checked links
               </summary>
-              <div className="overflow-x-auto border-t border-slate-100 px-3 pb-2">
+              <div className="overflow-x-auto border-t border-gray-200 px-3 pb-2">
                 <table className="w-full min-w-[32rem] text-left text-sm">
                   <tbody className="divide-y divide-slate-100">
                     {report.results.map((link) => (

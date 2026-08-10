@@ -40,9 +40,9 @@ const STATUS_STYLES: Record<CheckStatus, { chip: string; text: string; ring: str
 };
 
 const NEUTRAL = {
-  chip: "bg-slate-100 text-slate-600 border-slate-200",
-  text: "text-slate-500",
-  ring: "border-slate-300 text-slate-500 bg-slate-50",
+  chip: "bg-gray-50 text-slate-700 border-gray-200",
+  text: "text-slate-600",
+  ring: "border-gray-200 text-slate-600 bg-white",
 };
 
 export function stylesFor(status: CheckStatus | null) {
@@ -123,8 +123,8 @@ export function Card({
   const showBody = !collapsible || expanded;
 
   return (
-    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-      <header className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 px-5 py-4">
+    <section className="overflow-hidden rounded-xl border border-gray-200 shadow-sm bg-white">
+      <header className="flex flex-wrap items-start justify-between gap-3 border-b border-gray-200 px-5 py-4">
         <div>
           <h2 className="text-base font-semibold text-slate-900">{title}</h2>
           {subtitle ? <p className="mt-0.5 text-sm text-slate-500">{subtitle}</p> : null}
@@ -135,7 +135,7 @@ export function Card({
             <button
               type="button"
               onClick={() => setExpanded((value) => !value)}
-              className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-blue-400 hover:text-blue-600"
+              className="rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-blue-400 hover:text-blue-600"
             >
               {expanded ? "Hide" : "Show"}
             </button>

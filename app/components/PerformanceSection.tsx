@@ -11,7 +11,7 @@ function MetricGrid({ report }: { report: StrategyReport }) {
       {report.metrics.map((metric) => {
         const styles = stylesFor(statusFromUnitScore(metric.score));
         return (
-          <div key={metric.id} className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+          <div key={metric.id} className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
             <dt className="text-xs font-medium text-slate-500">{metric.label}</dt>
             <dd className={`mt-1 text-lg font-semibold tabular-nums ${styles.text}`}>
               {metric.displayValue ?? "–"}
@@ -35,9 +35,9 @@ function Suggestions({ report }: { report: StrategyReport }) {
   return (
     <ol className="space-y-3">
       {report.suggestions.map((suggestion, index) => (
-        <li key={suggestion.id} className="rounded-lg border border-slate-200 p-3">
+        <li key={suggestion.id} className="rounded-lg border border-gray-200 p-3">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-800 text-xs font-semibold text-white">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white-800 text-xs font-semibold text-slate">
               {index + 1}
             </span>
             <h4 className="text-sm font-semibold text-slate-900">{suggestion.title}</h4>
@@ -82,7 +82,7 @@ export default function PerformanceSection({ performance, pageUrl }: { performan
         <div
           role="tablist"
           aria-label="PageSpeed strategy"
-          className="inline-flex rounded-lg border border-slate-200 bg-slate-100 p-0.5"
+          className="inline-flex rounded-lg border border-gray-200 bg-white-100 p-0.5"
         >
           {(["mobile", "desktop"] as const).map((option) => (
             <button
@@ -93,7 +93,7 @@ export default function PerformanceSection({ performance, pageUrl }: { performan
               onClick={() => setStrategy(option)}
               className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize transition ${
                 strategy === option
-                  ? "bg-white text-slate-900 shadow-sm"
+                  ? " text-slate-900 shadow-sm"
                   : "text-slate-500 hover:text-slate-700"
               }`}
             >

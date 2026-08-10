@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full font-sans">{children}</body>
+      <body className="min-h-full bg-white/60 font-sans text-slate-900">{children}</body>
     </html>
   );
 }

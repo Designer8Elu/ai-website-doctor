@@ -24,10 +24,10 @@ function SummaryTile({
 }) {
   const styles = stylesFor(status);
   return (
-    <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
-      <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">{label}</p>
-      <p className={`mt-1 text-2xl font-bold tabular-nums ${styles.text}`}>{value}</p>
-      <p className="mt-0.5 text-xs text-slate-500">{hint}</p>
+    <div className="rounded-3xl border border-gray-200 bg-white px-5 py-4 ">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 bg-white">{label}</p>
+      <p className={`mt-3 text-2xl font-semibold tabular-nums bg-white ${styles.text}`}>{value}</p>
+      <p className="mt-2 text-xs text-slate-400 bg-white">{hint}</p>
     </div>
   );
 }
@@ -55,7 +55,7 @@ export default function Report({ report }: { report: AuditReport }) {
   return (
     <div className="space-y-5">
       {/* Report header ------------------------------------------------ */}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl glass px-5 py-4">
         <div className="min-w-0">
           <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
             Health report
