@@ -89,12 +89,6 @@ export interface ContentSeoQualityCheck {
   detail: string;
 }
 
-export interface StructuredDataItem {
-  type: string;
-  valid: boolean;
-  issue: string | null;
-}
-
 export interface ContentSeoQualityReport {
   checks: ContentSeoQualityCheck[];
   passed: number;

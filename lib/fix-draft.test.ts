@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { buildFixDraft } from "./fix-draft.ts";
+import { buildFixDraft } from "./fix-draft";
 
 test("buildFixDraft creates an image patch for missing alt text", () => {
   const draft = buildFixDraft({
