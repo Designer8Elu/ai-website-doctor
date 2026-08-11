@@ -69,6 +69,41 @@ export default function HomePage() {
 
   const step = PROGRESS_STEPS[Math.min(Math.floor(elapsed / 4), PROGRESS_STEPS.length - 1)];
 
+  const performanceScore = report
+    ? report.performance.mobile.data?.performanceScore ?? report.performance.desktop.data?.performanceScore
+    : null;
+  const seoScore = report?.seo.data
+    ? Math.round(
+        (report.seo.data.passed /
+          Math.max(1, report.seo.data.passed + report.seo.data.warned + report.seo.data.failed)) *
+          100,
+      )
+    : null;
+  const accessibilityScore = report?.accessibility.data
+    ? Math.round(
+        (report.accessibility.data.passed /
+          Math.max(
+            1,
+            report.accessibility.data.passed +
+              report.accessibility.data.warned +
+              report.accessibility.data.failed,
+          )) *
+          100,
+      )
+    : null;
+  const securityScore = report?.security.data
+    ? Math.round(
+        (report.security.data.passed /
+          Math.max(1, report.security.data.passed + report.security.data.warned + report.security.data.failed)) *
+          100,
+      )
+    : null;
+
+  const scores = [performanceScore, seoScore, accessibilityScore, securityScore].filter(
+    (value): value is number => value !== null,
+  );
+  const overallScore = scores.length > 0 ? Math.round(scores.reduce((sum, value) => sum + value, 0) / scores.length) : null;
+
   return (
     <main className="min-h-screen bg-slate-100 text-slate-900">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-10 sm:px-6 sm:py-14">
@@ -126,25 +161,25 @@ export default function HomePage() {
               <div className="relative space-y-6 text-slate-900">
                 <div className="rounded-3xl border border-gray-200 bg-white/70 p-5 shadow-sm">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Live audit preview</p>
-                  <p className="mt-3 text-3xl font-semibold">87</p>
+                  <p className="mt-3 text-3xl font-semibold">{overallScore ?? "–"}</p>
                   <p className="mt-2 text-sm text-slate-500">Overall health score</p>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="rounded-3xl border border-gray-200 bg-white/70 p-5 shadow-sm">
                     <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Performance</p>
-                    <p className="mt-3 text-2xl font-semibold text-emerald-600">94</p>
+                    <p className="mt-3 text-2xl font-semibold text-emerald-600">{performanceScore ?? "–"}</p>
                   </div>
                   <div className="rounded-3xl border border-gray-200 bg-white/70 p-5 shadow-sm">
                     <p className="text-xs uppercase tracking-[0.18em] text-slate-500">SEO</p>
-                    <p className="mt-3 text-2xl font-semibold text-indigo-600">88</p>
+                    <p className="mt-3 text-2xl font-semibold text-indigo-600">{seoScore ?? "–"}</p>
                   </div>
                   <div className="rounded-3xl border border-gray-200 bg-white/70 p-5 shadow-sm">
                     <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Accessibility</p>
-                    <p className="mt-3 text-2xl font-semibold text-amber-600">76</p>
+                    <p className="mt-3 text-2xl font-semibold text-amber-600">{accessibilityScore ?? "–"}</p>
                   </div>
                   <div className="rounded-3xl border border-gray-200 bg-white/70 p-5 shadow-sm">
                     <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Security</p>
-                    <p className="mt-3 text-2xl font-semibold text-cyan-600">91</p>
+                    <p className="mt-3 text-2xl font-semibold text-cyan-600">{securityScore ?? "–"}</p>
                   </div>
                 </div>
               </div>
