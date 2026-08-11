@@ -16,19 +16,30 @@ function SummaryTile({
   value,
   status,
   hint,
+  targetId,
 }: {
   label: string;
   value: string;
   status: CheckStatus | null;
   hint: string;
+  targetId: string;
 }) {
   const styles = stylesFor(status);
+
+  function handleClick() {
+    document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
-    <div className="rounded-3xl border border-gray-200 bg-white px-5 py-4 ">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 bg-white">{label}</p>
-      <p className={`mt-3 text-2xl font-semibold tabular-nums bg-white ${styles.text}`}>{value}</p>
-      <p className="mt-2 text-xs text-slate-400 bg-white">{hint}</p>
-    </div>
+    <button
+      type="button"
+      onClick={handleClick}
+      className="rounded-3xl border border-gray-200 bg-white px-5 py-4 text-left transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+    >
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 ">{label}</p>
+      <p className={`mt-3 text-2xl font-semibold tabular-nums  ${styles.text}`}>{value}</p>
+      <p className="mt-2 text-xs text-slate-400 ">{hint}</p>
+    </button>
   );
 }
 
@@ -83,12 +94,14 @@ export default function Report({ report }: { report: AuditReport }) {
           value={mobileScore === null ? "-" : String(mobileScore)}
           status={statusFromScore(mobileScore)}
           hint="Mobile Lighthouse score"
+          targetId="performance-section"
         />
         <SummaryTile
           label="SEO tags"
           value={seo ? `${seo.passed}/${seoTotal}` : "-"}
           status={seo ? (seo.failed > 0 ? "fail" : seo.warned > 0 ? "warn" : "pass") : null}
           hint={seo ? `${seo.failed} missing, ${seo.warned} to review` : "Check unavailable"}
+          targetId="seo-section"
         />
         <SummaryTile
           label="Content SEO"
@@ -103,36 +116,49 @@ export default function Report({ report }: { report: AuditReport }) {
               : null
           }
           hint={contentSeo ? `${contentSeo.failed} fail, ${contentSeo.warned} warn` : "Check unavailable"}
+          targetId="content-seo-section"
         />
         <SummaryTile
           label="Images"
           value={imageIssues === null ? "-" : String(imageIssues)}
           status={imageIssues === null ? null : imageIssues === 0 ? "pass" : "warn"}
           hint={images ? `across ${images.total} images` : "Check unavailable"}
+          targetId="images-section"
         />
         <SummaryTile
           label="Broken links"
           value={brokenCount === null ? "-" : String(brokenCount)}
           status={brokenCount === null ? null : brokenCount === 0 ? "pass" : "fail"}
           hint={links ? `of ${links.checked} internal links` : "Check unavailable"}
+          targetId="links-section"
         />
         <SummaryTile
           label="Accessibility"
           value={accessibilityIssues === null ? "-" : String(accessibilityIssues)}
           status={accessibilityIssues === null ? null : accessibilityIssues === 0 ? "pass" : "warn"}
           hint={accessibility ? `${accessibility.failed} blocking issues` : "Check unavailable"}
+          targetId="accessibility-section"
         />
       </div>
 
       {/* Detailed sections -------------------------------------------- */}
+      <div id="performance-section" />
       <PerformanceSection performance={report.performance} pageUrl={pageUrl} />
+      <div id="html-section" />
       <HtmlSection html={report.html} pageUrl={pageUrl} />
+      <div id="accessibility-section" />
       <AccessibilitySection accessibility={report.accessibility} pageUrl={pageUrl} />
+      <div id="security-section" />
       <SecuritySection security={report.security} pageUrl={pageUrl} />
+      <div id="structured-data-section" />
       <StructuredDataSection structuredData={report.structuredData} pageUrl={pageUrl} />
+      <div id="seo-section" />
       <SeoSection seo={report.seo} pageUrl={pageUrl} />
+      <div id="content-seo-section" />
       <ContentSeoSection contentSeo={report.contentSeo} pageUrl={pageUrl} />
+      <div id="images-section" />
       <ImagesSection images={report.images} pageUrl={pageUrl} />
+      <div id="links-section" />
       <LinksSection links={report.links} pageUrl={pageUrl} />
 
       {/* FUTURE SECTIONS - drop new <Card> blocks in here once the modules exist:

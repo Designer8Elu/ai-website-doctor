@@ -100,13 +100,6 @@ export default function RecommendedFixButton({ context }: { context: Recommended
               ) : null}
               <button
                 type="button"
-                onClick={applyDraft}
-                className="rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100"
-              >
-                {applied ? "Applied draft" : "Apply Fix"}
-              </button>
-              <button
-                type="button"
                 onClick={() => {
                   setRecommendation(null);
                   setError(null);
