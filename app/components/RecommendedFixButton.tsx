@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+
+import { buildFixDraft } from "@/lib/fix-draft";
 
 export interface RecommendedFixContext {
   category: string;
@@ -16,6 +18,9 @@ export default function RecommendedFixButton({ context }: { context: Recommended
   const [recommendation, setRecommendation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [applied, setApplied] = useState(false);
+
+  const draft = useMemo(() => buildFixDraft(context), [context]);
 
   async function loadRecommendation() {
     if (loading) return;
@@ -59,6 +64,11 @@ export default function RecommendedFixButton({ context }: { context: Recommended
     }
   }
 
+  function applyDraft() {
+    setApplied(true);
+    setRecommendation(`${draft.summary}\n\nSuggested patch:\n${draft.patch}\n\nNotes:\n${draft.notes.join("\n")}`);
+  }
+
   const open = Boolean(recommendation || error);
 
   return (
@@ -73,8 +83,8 @@ export default function RecommendedFixButton({ context }: { context: Recommended
       </button>
 
       {open ? (
-        <div className="mt-2 rounded-lg border border-slate-200 bg-white p-3 text-left shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2">
+        <div className="mt-2 rounded-lg border border-gray-200 bg-white p-3 text-left shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-200 pb-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               Recommended fix
             </p>
@@ -83,18 +93,25 @@ export default function RecommendedFixButton({ context }: { context: Recommended
                 <button
                   type="button"
                   onClick={copyRecommendation}
-                  className="rounded-md border border-slate-200 px-2 py-1 text-xs font-medium text-slate-600 transition hover:border-blue-300 hover:text-blue-700"
+                  className="rounded-md border border-gray-200 px-2 py-1 text-xs font-medium text-slate-600 transition hover:border-blue-300 hover:text-blue-700"
                 >
                   {copied ? "Copied" : "Copy to Clipboard"}
                 </button>
               ) : null}
               <button
                 type="button"
+                onClick={applyDraft}
+                className="rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100"
+              >
+                {applied ? "Applied draft" : "Apply Fix"}
+              </button>
+              <button
+                type="button"
                 onClick={() => {
                   setRecommendation(null);
                   setError(null);
                 }}
-                className="rounded-md border border-slate-200 px-2 py-1 text-xs font-medium text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
+                className="rounded-md border border-gray-200 px-2 py-1 text-xs font-medium text-slate-600 transition hover:border-gray-300 hover:text-slate-900"
               >
                 Close
               </button>
@@ -104,9 +121,17 @@ export default function RecommendedFixButton({ context }: { context: Recommended
           {error ? (
             <p className="mt-3 text-sm text-red-700">{error}</p>
           ) : (
-            <pre className="mt-3 whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-slate-700">
-              {recommendation}
-            </pre>
+            <div className="mt-3 space-y-3">
+              <div className="rounded-lg border border-gray-200 bg-white-50 p-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Suggested patch</p>
+                <pre className="mt-2 whitespace-pre-wrap break-words font-mono text-sm leading-relaxed text-slate-700">
+                  {draft.patch}
+                </pre>
+              </div>
+              <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-slate-700">
+                {recommendation}
+              </pre>
+            </div>
           )}
         </div>
       ) : null}

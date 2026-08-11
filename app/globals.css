@@ -6,16 +6,46 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 }
 
+:root {
+  color-scheme: light;
+  color: #0f172a;
+  background-color: #ffffff;
+  --surface: #ffffff;
+  --surface-muted: rgba(255,255,255,0.7);
+  --surface-strong: #f8fafc;
+  --surface-soft: rgba(255,255,255,0.7);
+  --glass-border: rgba(15,23,42,0.06);
+  --text-primary: #0f172a;
+  --text-muted: #475569;
+  --accent: #7c3aed;
+  --accent-soft: rgba(124, 58, 237, 0.12);
+}
+
 html {
+  min-height: 100%;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background-color: #f8fafc; /* slate-50 */
-  color: #0f172a; /* slate-900 */
+  min-height: 100%;
+  margin: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
 }
 
-/* Long URLs in the report must wrap instead of stretching their container. */
+::selection {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+
+/* Glass utility */
+.glass {
+  background: rgba(255,255,255,0.72);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(8px) saturate(120%);
+}
+
 .break-anywhere {
   overflow-wrap: anywhere;
   word-break: break-word;

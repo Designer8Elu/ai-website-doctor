@@ -38,7 +38,7 @@ export default function SeoSection({
                   <p className="text-sm font-medium text-slate-900">{check.label}</p>
                   <p className="text-sm text-slate-500">{check.detail}</p>
                   {check.value ? (
-                    <p className="break-anywhere mt-1 rounded bg-slate-50 px-2 py-1 font-mono text-xs text-slate-600">
+                    <p className="break-anywhere mt-1 rounded bg-white-50 px-2 py-1 font-mono text-xs text-slate-600">
                       {check.value}
                     </p>
                   ) : null}
@@ -60,7 +60,7 @@ export default function SeoSection({
           </ul>
 
           {report.declaredSitemaps.length > 0 ? (
-            <p className="break-anywhere mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
+            <p className="break-anywhere mt-4 border-t border-gray-200 pt-3 text-xs text-slate-500">
               Sitemaps declared in robots.txt: {report.declaredSitemaps.join(", ")}
             </p>
           ) : null}

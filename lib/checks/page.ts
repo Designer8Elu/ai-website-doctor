@@ -79,6 +79,7 @@ export async function fetchPage(url: string): Promise<FetchedPage> {
       status: response.status,
       contentType,
       htmlBytes: bytes,
+      headers: Object.fromEntries(response.headers.entries()),
     },
   };
 }

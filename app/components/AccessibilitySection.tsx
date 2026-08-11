@@ -3,8 +3,10 @@ import { Card, EmptyNote, Pill } from "./ui";
 
 export default function AccessibilitySection({
   accessibility,
+  pageUrl,
 }: {
   accessibility: SectionResult<AccessibilityReport>;
+  pageUrl: string;
 }) {
   const report = accessibility.data;
 
@@ -26,15 +28,15 @@ export default function AccessibilitySection({
       {report ? (
         <div className="space-y-3">
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
               <p className="text-xs font-medium text-slate-500">Checks</p>
               <p className="mt-1 text-sm font-semibold text-slate-900">{report.issues.length}</p>
             </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
               <p className="text-xs font-medium text-slate-500">Warnings</p>
               <p className="mt-1 text-sm font-semibold text-slate-900">{report.warned}</p>
             </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
               <p className="text-xs font-medium text-slate-500">Failures</p>
               <p className="mt-1 text-sm font-semibold text-slate-900">{report.failed}</p>
             </div>

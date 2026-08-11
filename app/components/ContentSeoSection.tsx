@@ -29,15 +29,15 @@ export default function ContentSeoSection({
       {report ? (
         <div className="space-y-4">
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
               <p className="text-xs font-medium text-slate-500">Readable words</p>
               <p className="mt-1 text-sm font-semibold text-slate-900">{report.wordCount}</p>
             </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
               <p className="text-xs font-medium text-slate-500">H1 tags</p>
               <p className="mt-1 text-sm font-semibold text-slate-900">{report.h1Count}</p>
             </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
               <p className="text-xs font-medium text-slate-500">Indexing</p>
               <p className="mt-1 text-sm font-semibold text-slate-900">
                 {report.noindex ? "Blocked" : "Allowed"}
@@ -55,7 +55,7 @@ export default function ContentSeoSection({
                   <p className="text-sm font-medium text-slate-900">{check.label}</p>
                   <p className="text-sm text-slate-500">{check.detail}</p>
                   {check.value ? (
-                    <p className="break-anywhere mt-1 rounded bg-slate-50 px-2 py-1 font-mono text-xs text-slate-600">
+                    <p className="break-anywhere mt-1 rounded bg-white-50 px-2 py-1 font-mono text-xs text-slate-600">
                       {check.value}
                     </p>
                   ) : null}
@@ -77,7 +77,7 @@ export default function ContentSeoSection({
           </ul>
 
           {report.h1Texts.length > 0 ? (
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <div className="rounded-lg border border-gray-200 bg-white-50 p-3">
               <p className="text-sm font-semibold text-slate-900">H1 text</p>
               <ul className="mt-2 space-y-1">
                 {report.h1Texts.map((text, index) => (
@@ -95,7 +95,7 @@ export default function ContentSeoSection({
           ) : null}
 
           {report.structuredData.length > 0 ? (
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <div className="rounded-lg border border-gray-200 bg-white-50 p-3">
               <p className="text-sm font-semibold text-slate-900">Structured data</p>
               <ul className="mt-2 space-y-1">
                 {report.structuredData.map((item, index) => (

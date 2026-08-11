@@ -5,7 +5,7 @@ import { Card, EmptyNote, Pill } from "./ui";
 function Stat({ label, value, status }: { label: string; value: number; status: "pass" | "warn" | "fail" }) {
   const tone = value === 0 ? "pass" : status;
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+    <div className="rounded-lg border border-gray-200 bg-white-50 px-3 py-2.5">
       <p className="text-xs font-medium text-slate-500">{label}</p>
       <p className="mt-1">
         <Pill status={tone}>{value}</Pill>
@@ -49,7 +49,7 @@ export default function ImagesSection({
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[32rem] text-left text-sm">
                   <thead>
-                    <tr className="border-b border-slate-200 text-xs tracking-wide text-slate-500 uppercase">
+                    <tr className="border-b border-gray-200 text-xs tracking-wide text-slate-500 uppercase">
                       <th className="py-2 pr-3 font-medium">Image</th>
                       <th className="py-2 font-medium">Issues</th>
                     </tr>
