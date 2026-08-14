@@ -33,3 +33,24 @@ test("flags missing or invalid schema blocks", () => {
 
   assert.ok(report.issues.some((issue) => issue.label.includes("Structured data")));
 });
+
+test("accepts structured data with nested @graph entries", () => {
+  const $ = cheerio.load(`<!DOCTYPE html>
+<html>
+  <head>
+    <script type="application/ld+json">{
+      "@context": "https://schema.org",
+      "@graph": [
+        {"@type": "Organization", "name": "Example"},
+        {"@type": "WebSite", "url": "https://example.com"}
+      ]
+    }</script>
+  </head>
+  <body></body>
+</html>`);
+
+  const report = runStructuredDataCheck($);
+
+  assert.equal(report.failed, 0);
+  assert.equal(report.warned, 0);
+});

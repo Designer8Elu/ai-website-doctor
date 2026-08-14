@@ -42,6 +42,31 @@ function getRobotsDirectives($: CheerioAPI): string[] {
   return [...directives];
 }
 
+function extractStructuredDataTypes(entry: unknown): string[] {
+  if (!entry || typeof entry !== "object") return [];
+  if (Array.isArray(entry)) {
+    return entry.flatMap(extractStructuredDataTypes);
+  }
+
+  const types: string[] = [];
+  if ("@type" in entry) {
+    const typeValue = (entry as { "@type"?: unknown })["@type"];
+    if (typeof typeValue === "string") {
+      types.push(typeValue);
+    } else if (Array.isArray(typeValue)) {
+      types.push(...typeValue.filter((item): item is string => typeof item === "string"));
+    }
+  }
+
+  for (const value of Object.values(entry)) {
+    if (typeof value === "object" && value !== null) {
+      types.push(...extractStructuredDataTypes(value));
+    }
+  }
+
+  return types;
+}
+
 function parseStructuredData($: CheerioAPI): StructuredDataItem[] {
   return $('script[type="application/ld+json" i]')
     .toArray()
@@ -54,13 +79,9 @@ function parseStructuredData($: CheerioAPI): StructuredDataItem[] {
       try {
         const parsed = JSON.parse(raw) as unknown;
         const entries = Array.isArray(parsed) ? parsed : [parsed];
-        const types = entries
-          .map((entry) => {
-            if (!entry || typeof entry !== "object" || !("@type" in entry)) return null;
-            const type = (entry as { "@type"?: unknown })["@type"];
-            return Array.isArray(type) ? type.join(", ") : typeof type === "string" ? type : null;
-          })
-          .filter((type): type is string => Boolean(type));
+        const types = Array.from(
+          new Set(entries.flatMap((entry) => extractStructuredDataTypes(entry)))
+        );
 
         return {
           type: types.length > 0 ? types.join(" + ") : `JSON-LD #${index + 1}`,

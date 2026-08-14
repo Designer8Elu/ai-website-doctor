@@ -80,16 +80,7 @@ export default function HomePage() {
       )
     : null;
   const accessibilityScore = report?.accessibility.data
-    ? Math.round(
-        (report.accessibility.data.passed /
-          Math.max(
-            1,
-            report.accessibility.data.passed +
-              report.accessibility.data.warned +
-              report.accessibility.data.failed,
-          )) *
-          100,
-      )
+    ? Math.max(0, 100 - report.accessibility.data.failed * 12)
     : null;
   const securityScore = report?.security.data
     ? Math.round(

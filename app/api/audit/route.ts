@@ -17,6 +17,12 @@ export const runtime = "nodejs";
 export const maxDuration = 120;
 export const dynamic = "force-dynamic";
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
 async function handle(rawUrl: unknown) {
   if (typeof rawUrl !== "string") {
     return NextResponse.json({ error: "Provide a `url` string." }, { status: 400 });
@@ -34,7 +40,7 @@ async function handle(rawUrl: unknown) {
 
   try {
     const report = await runAudit(target.toString());
-    return NextResponse.json(report);
+    return NextResponse.json(report, { headers: CORS_HEADERS });
   } catch (error) {
     // Individual checks already degrade gracefully, so reaching here means
     // something unexpected broke in the orchestrator itself.
@@ -46,12 +52,19 @@ async function handle(rawUrl: unknown) {
   }
 }
 
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: CORS_HEADERS,
+  });
+}
+
 export async function POST(request: Request) {
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Request body must be JSON." }, { status: 400 });
+    return NextResponse.json({ error: "Request body must be JSON." }, { status: 400, headers: CORS_HEADERS });
   }
 
   return handle((body as { url?: unknown } | null)?.url);

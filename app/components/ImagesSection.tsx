@@ -47,27 +47,28 @@ export default function ImagesSection({
               <EmptyNote>Every image passed the checks. Nice.</EmptyNote>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[32rem] text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-gray-200 text-xs tracking-wide text-slate-500 uppercase">
-                      <th className="py-2 pr-3 font-medium">Image</th>
-                      <th className="py-2 font-medium">Issues</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
+                <div className="w-full min-w-[32rem] text-left text-sm">
+                  <div className="flex justify-between w-full">
+                    <div className="flex row justify-between w-full border-b border-gray-200 text-xs tracking-wide text-slate-500 uppercase">
+                      <h4 className="py-2 pr-3 font-medium">Image</h4>
+                      <h4 className="py-2 font-medium">Issues</h4>
+                    </div>
+                  </div>
+                  <div className="divide-y divide-slate-100">
                     {flagged.map((item, index) => (
-                      <tr key={`${item.src}-${index}`} className="align-top">
-                        <td className="break-anywhere max-w-[22rem] py-2 pr-3 font-mono text-xs text-slate-600">
+                      <div key={`${item.src}-${index}`} className="align-top flex justify-between gap-3 flex-row flex-wrap w-full ">
+                        <div className="w-9/12 break-anywhere max-w-[22rem] py-2 pr-3 font-mono text-xs text-slate-600">
                           {item.src}
-                        </td>
-                        <td className="py-2">
+                        </div>
+                        <div className="py-2 w-3/12">
                           <ul className="space-y-1">
                             {item.issues.map((issue) => (
-                              <li key={issue} className="text-slate-600">
+                              <li key={issue} className="text-slate-600 text-right">
                                 • {issue}
                               </li>
                             ))}
                           </ul>
+                          </div>
                           <RecommendedFixButton
                             context={{
                               category: "Images",
@@ -78,11 +79,10 @@ export default function ImagesSection({
                               pageUrl,
                             }}
                           />
-                        </td>
-                      </tr>
+                      </div>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+                </div>
               </div>
             )}
 
