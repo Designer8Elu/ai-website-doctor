@@ -14,6 +14,31 @@ export function runStructuredDataCheck($: CheerioAPI): StructuredDataReport {
     return { items: [], issues, passed: 0, warned: 0, failed: 1 };
   }
 
+  function extractStructuredDataTypes(entry: unknown): string[] {
+    if (!entry || typeof entry !== "object") return [];
+    if (Array.isArray(entry)) {
+      return entry.flatMap(extractStructuredDataTypes);
+    }
+
+    const types: string[] = [];
+    if ("@type" in entry) {
+      const typeValue = (entry as { "@type"?: unknown })["@type"];
+      if (typeof typeValue === "string") {
+        types.push(typeValue);
+      } else if (Array.isArray(typeValue)) {
+        types.push(...typeValue.filter((item): item is string => typeof item === "string"));
+      }
+    }
+
+    for (const value of Object.values(entry)) {
+      if (typeof value === "object" && value !== null) {
+        types.push(...extractStructuredDataTypes(value));
+      }
+    }
+
+    return types;
+  }
+
   const items = blocks.map((element, index) => {
     const raw = $(element).contents().text().trim();
     if (!raw) {
@@ -24,13 +49,9 @@ export function runStructuredDataCheck($: CheerioAPI): StructuredDataReport {
     try {
       const parsed = JSON.parse(raw) as unknown;
       const entries = Array.isArray(parsed) ? parsed : [parsed];
-      const types = entries
-        .map((entry) => {
-          if (!entry || typeof entry !== "object" || !("@type" in entry)) return null;
-          const type = (entry as { "@type"?: unknown })["@type"];
-          return Array.isArray(type) ? type.join(", ") : typeof type === "string" ? type : null;
-        })
-        .filter((type): type is string => Boolean(type));
+      const types = Array.from(
+        new Set(entries.flatMap((entry) => extractStructuredDataTypes(entry)))
+      );
 
       if (types.length === 0) {
         issues.push(buildIssue(`Structured data #${index + 1}`, "The JSON-LD block is missing @type."));
