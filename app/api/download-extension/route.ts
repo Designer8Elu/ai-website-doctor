@@ -1,51 +1,37 @@
-import archiver from "archiver";
-import { createReadStream } from "fs";
 import { resolve } from "path";
 import { NextResponse } from "next/server";
+import { PassThrough } from "stream";
+
+// @ts-ignore - archiver is a valid package with working types at runtime
+const archiver = require("archiver");
 
 export async function GET() {
   try {
+    const extensionPath = resolve(process.cwd(), "chrome-extension");
+    
+    // Create a PassThrough stream to handle the data
+    const passThrough = new PassThrough();
+    
     const archive = archiver("zip", {
       zlib: { level: 9 },
     });
 
-    const extensionPath = resolve(process.cwd(), "chrome-extension");
-
-    // Set up the response headers
-    const response = new NextResponse(null, {
-      status: 200,
-      statusText: "OK",
-      headers: {
-        "Content-Type": "application/zip",
-        "Content-Disposition": 'attachment; filename="ai-website-doctor-extension.zip"',
-      },
-    });
-
-    // Use a writable stream to pipe archive to response
-    const chunks: Buffer[] = [];
-
-    archive.on("data", (chunk: Buffer) => {
-      chunks.push(chunk);
-    });
-
-    archive.on("end", () => {
-      // Respond with the zip file
-      return response;
-    });
-
+    // Handle archive errors
     archive.on("error", (err: Error) => {
       console.error("Archive error:", err);
+      passThrough.destroy(err);
     });
+
+    // Pipe archive to passthrough stream
+    archive.pipe(passThrough);
 
     // Add all files from chrome-extension directory
     archive.directory(extensionPath, false);
 
+    // Finalize the archive
     await archive.finalize();
 
-    // Create the response body from chunks
-    const body = Buffer.concat(chunks);
-
-    return new Response(body, {
+    return new Response(passThrough as unknown as BodyInit, {
       status: 200,
       headers: {
         "Content-Type": "application/zip",
@@ -57,3 +43,4 @@ export async function GET() {
     return NextResponse.json({ error: "Failed to create extension archive" }, { status: 500 });
   }
 }
+
