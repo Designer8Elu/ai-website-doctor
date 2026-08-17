@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import Report from "./components/Report";
+import DownloadExtensionButton from "./components/DownloadExtensionButton";
 import type { AuditReport } from "@/lib/types";
 
 /** Shown one after another while the audit runs, purely so the wait feels alive. */
@@ -124,12 +125,12 @@ export default function HomePage() {
                   onChange={(event) => setUrl(event.target.value)}
                   placeholder="https://example.com"
                   disabled={loading}
-                  className="flex-1 rounded-3xl border border-gray-200 bg-white/70 px-5 py-4 text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/40 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex-1 rounded-3xl border border-gray-200 bg-white/70 px-5 py-3 text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/40 disabled:cursor-not-allowed disabled:opacity-60"
                 />
                 <button
                   type="submit"
                   disabled={loading || url.trim() === ""}
-                  className="inline-flex items-center justify-center rounded-3xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-4 text-sm font-semibold text-white shadow transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center justify-center rounded-3xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-3 text-sm font-semibold text-white shadow transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {loading ? "Analyzing…" : "Analyze Website"}
                 </button>
@@ -143,6 +144,18 @@ export default function HomePage() {
                 <div className="rounded-3xl border border-gray-200 text-gray/10 bg-white-950/80 p-5 shadow-sm">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Built for dev teams</p>
                   <p className="mt-3 text-lg font-semibold text-slate">Actionable fixes with AI-guided recommendations</p>
+                </div>
+              </div>
+
+              <div className="rounded-3xl border border-purple-200/50 bg-gradient-to-br from-purple-50 to-blue-50 p-6 shadow-sm">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.2em] text-slate-600 font-semibold">Chrome Extension</p>
+                    <p className="mt-2 text-sm text-slate-700">Use AI Website Doctor directly in your browser without leaving Chrome.</p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <DownloadExtensionButton />
                 </div>
               </div>
             </div>
