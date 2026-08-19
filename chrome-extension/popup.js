@@ -1,4 +1,4 @@
-const DEFAULT_API_URL = 'http://localhost:3000/api/audit';
+const DEFAULT_API_URL = 'https://ai-website-doctor.vercel.app/api/audit';
 const apiUrlInput = document.getElementById('apiUrl');
 const pageUrlInput = document.getElementById('pageUrl');
 const statusEl = document.getElementById('status');

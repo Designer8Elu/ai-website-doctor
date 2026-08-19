@@ -10,8 +10,8 @@ import type { PerfMetric, PerfSuggestion, Strategy, StrategyReport } from "@/lib
 
 const PSI_ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
 
-/** A cold Lighthouse run on a slow site regularly takes 30s+. */
-const PSI_TIMEOUT_MS = 75_000;
+/** A cold Lighthouse run on a slow site can take well over a minute. */
+const PSI_TIMEOUT_MS = Number(process.env.PAGESPEED_TIMEOUT_MS ?? 110_000);
 
 /** The six headline numbers we surface, in Lighthouse's own display order. */
 const METRIC_AUDITS: Array<{ id: string; label: string }> = [
