@@ -14,7 +14,7 @@ import { AuditInputError, normalizeUrl } from "@/lib/url";
 // Node runtime: cheerio and the streaming body reader need Node APIs.
 export const runtime = "nodejs";
 // A full audit is two Lighthouse runs plus a link sweep; give it room.
-export const maxDuration = 120;
+export const maxDuration = 180;
 export const dynamic = "force-dynamic";
 
 const CORS_HEADERS = {
