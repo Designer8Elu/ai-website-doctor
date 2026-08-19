@@ -165,7 +165,7 @@ export async function runPageSpeed(url: string, strategy: Strategy): Promise<Str
   }
   if (lighthouse.runtimeError?.code) {
     throw new Error(
-      `Lighthouse could not analyse this page: ${lighthouse.runtimeError.message ?? lighthouse.runtimeError.code}`,
+      `PageSpeed Insights (${strategy}) Lighthouse error [${lighthouse.runtimeError.code}]: ${lighthouse.runtimeError.message ?? "The page could not be analysed."}`,
     );
   }
 
