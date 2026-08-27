@@ -1,5 +1,6 @@
 import type { AuditReport, CheckStatus } from "@/lib/types";
 import AccessibilitySection from "./AccessibilitySection";
+import ClientSummarySection from "./ClientSummarySection";
 import ContentSeoSection from "./ContentSeoSection";
 import HtmlSection from "./HtmlSection";
 import ImagesSection from "./ImagesSection";
@@ -39,6 +40,18 @@ function SummaryTile({
       <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 ">{label}</p>
       <p className={`mt-3 text-2xl font-semibold tabular-nums  ${styles.text}`}>{value}</p>
       <p className="mt-2 text-xs text-slate-400 ">{hint}</p>
+    </button>
+  );
+}
+
+function ExportPdfButton() {
+  return (
+    <button
+      type="button"
+      onClick={() => window.print()}
+      className="print:hidden cursor-pointer inline-flex items-center gap-2 rounded-3xl bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+    >
+      Export PDF
     </button>
   );
 }
@@ -84,7 +97,10 @@ export default function Report({ report }: { report: AuditReport }) {
             {(report.durationMs / 1000).toFixed(1)}s
           </p>
         </div>
-        <ScoreDial score={mobileScore} label="Mobile score" />
+        <div className="flex items-center gap-4">
+          <ExportPdfButton />
+          <ScoreDial score={mobileScore} label="Mobile score" />
+        </div>
       </div>
 
       {/* At-a-glance summary ------------------------------------------ */}
@@ -140,6 +156,8 @@ export default function Report({ report }: { report: AuditReport }) {
           targetId="accessibility-section"
         />
       </div>
+
+      <ClientSummarySection report={report} />
 
       {/* Detailed sections -------------------------------------------- */}
       <div id="performance-section" />

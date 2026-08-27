@@ -123,7 +123,7 @@ export function Card({
   const showBody = !collapsible || expanded;
 
   return (
-    <section className="overflow-hidden rounded-xl border border-gray-200 shadow-sm bg-white">
+    <section className="overflow-hidden rounded-xl border border-gray-200 shadow-sm bg-white print:break-inside-avoid">
       <header className="flex flex-wrap items-start justify-between gap-3 border-b border-gray-200 px-5 py-4">
         <div>
           <h2 className="text-base font-semibold text-slate-900">{title}</h2>
@@ -135,7 +135,7 @@ export function Card({
             <button
               type="button"
               onClick={() => setExpanded((value) => !value)}
-              className="rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-blue-400 hover:text-blue-600"
+              className="print:hidden rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-blue-400 hover:text-blue-600"
             >
               {expanded ? "Hide" : "Show"}
             </button>
@@ -143,17 +143,17 @@ export function Card({
         </div>
       </header>
 
-      {showBody ? (
-        <div className="px-5 py-4">
-          {error ? (
-            <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
-              {error}
-            </p>
-          ) : (
-            children
-          )}
-        </div>
-      ) : null}
+      {/* Kept mounted (just visually hidden) so a print/PDF export always includes
+          collapsed sections regardless of their on-screen expanded state. */}
+      <div className={`px-5 py-4 ${showBody ? "" : "hidden"} print:block`}>
+        {error ? (
+          <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+            {error}
+          </p>
+        ) : (
+          children
+        )}
+      </div>
     </section>
   );
 }

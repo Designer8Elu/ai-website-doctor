@@ -14,6 +14,11 @@ function Stat({ label, value, status }: { label: string; value: number; status: 
   );
 }
 
+function formatBytes(bytes: number): string {
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${Math.round(bytes / 1024)} KB`;
+}
+
 export default function ImagesSection({
   images,
   pageUrl,
@@ -41,7 +46,12 @@ export default function ImagesSection({
               <Stat label="Empty alt" value={report.emptyAlt} status="warn" />
               <Stat label='No loading="lazy"' value={report.missingLazy} status="warn" />
               <Stat label="No width/height" value={report.missingDimensions} status="warn" />
+              <Stat label="Heavy files" value={report.heavyImages} status="warn" />
+              <Stat label="Legacy format" value={report.legacyFormatImages} status="warn" />
             </div>
+            <p className="text-xs text-slate-400">
+              File size and format checked on {report.weightChecked} unique image{report.weightChecked === 1 ? "" : "s"}.
+            </p>
 
             {flagged.length === 0 ? (
               <EmptyNote>Every image passed the checks. Nice.</EmptyNote>
@@ -59,6 +69,12 @@ export default function ImagesSection({
                       <div key={`${item.src}-${index}`} className="align-top flex justify-between gap-3 flex-row flex-wrap w-full ">
                         <div className="w-9/12 break-anywhere max-w-[22rem] py-2 pr-3 font-mono text-xs text-slate-600">
                           {item.src}
+                          {item.fileSizeBytes !== null || item.format ? (
+                            <span className="mt-1 block font-sans text-slate-400">
+                              {item.format ? item.format.toUpperCase() : "Unknown format"}
+                              {item.fileSizeBytes !== null ? ` · ${formatBytes(item.fileSizeBytes)}` : ""}
+                            </span>
+                          ) : null}
                         </div>
                         <div className="py-2 w-3/12">
                           <ul className="space-y-1">
@@ -91,8 +107,6 @@ export default function ImagesSection({
                 Showing the {report.items.length} images with the most issues out of {report.total}.
               </p>
             ) : null}
-
-            {/* FUTURE (v2): actual file size vs. rendered size, and format hints. */}
           </div>
         )
       ) : null}

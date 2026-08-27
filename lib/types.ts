@@ -115,6 +115,10 @@ export interface ImageItem {
   width: string | null;
   height: string | null;
   issues: string[];
+  /** Real file size in bytes, from a HEAD request. Null if unchecked or unavailable. */
+  fileSizeBytes: number | null;
+  /** Image format read from the response Content-Type, e.g. "jpeg", "webp". */
+  format: string | null;
 }
 
 export interface ImagesReport {
@@ -124,6 +128,12 @@ export interface ImagesReport {
   emptyAlt: number;
   missingLazy: number;
   missingDimensions: number;
+  /** Images flagged for a large file size. */
+  heavyImages: number;
+  /** Images served in a legacy format (JPEG/PNG/GIF) that would benefit from WebP/AVIF. */
+  legacyFormatImages: number;
+  /** How many unique image URLs were actually fetched for weight analysis (capped). */
+  weightChecked: number;
   items: ImageItem[];
   /** True when `items` was capped for payload size. */
   truncated: boolean;
@@ -183,6 +193,7 @@ export interface AccessibilityIssue {
   label: string;
   detail: string;
   status: CheckStatus;
+  target?: string;
 }
 
 export interface AccessibilityReport {

@@ -72,7 +72,7 @@ export default function RecommendedFixButton({ context }: { context: Recommended
   const open = Boolean(recommendation || error);
 
   return (
-    <div className="mt-2 w-full ">
+    <div className="mt-2 w-full print:hidden">
       <button
         type="button"
         onClick={loadRecommendation}
