@@ -1,4 +1,5 @@
 import type { SectionResult, StructuredDataReport } from "@/lib/types";
+import RecommendedFixButton from "./RecommendedFixButton";
 import { Card, EmptyNote, Pill } from "./ui";
 
 export default function StructuredDataSection({
@@ -35,6 +36,15 @@ export default function StructuredDataSection({
                 <li key={`${issue.label}-${index}`} className="text-sm text-amber-800">
                   <p className="font-semibold">{issue.label}</p>
                   <p className="mt-1 text-sm text-amber-700">{issue.detail}</p>
+                  <RecommendedFixButton
+                    context={{
+                      category: "Structured data",
+                      label: issue.label,
+                      status: issue.status,
+                      detail: issue.detail,
+                      pageUrl,
+                    }}
+                  />
                 </li>
               ))}
             </ul>

@@ -43,6 +43,18 @@ function SummaryTile({
   );
 }
 
+function ExportPdfButton() {
+  return (
+    <button
+      type="button"
+      onClick={() => window.print()}
+      className="print:hidden inline-flex items-center rounded-full border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 shadow-sm transition hover:border-blue-300 hover:text-blue-700"
+    >
+      Export PDF
+    </button>
+  );
+}
+
 export default function Report({ report }: { report: AuditReport }) {
   const mobileScore = report.performance.mobile.data?.performanceScore ?? null;
   const seo = report.seo.data;
@@ -84,7 +96,10 @@ export default function Report({ report }: { report: AuditReport }) {
             {(report.durationMs / 1000).toFixed(1)}s
           </p>
         </div>
-        <ScoreDial score={mobileScore} label="Mobile score" />
+        <div className="flex items-center gap-4">
+          <ExportPdfButton />
+          <ScoreDial score={mobileScore} label="Mobile score" />
+        </div>
       </div>
 
       {/* At-a-glance summary ------------------------------------------ */}

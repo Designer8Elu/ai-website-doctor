@@ -40,7 +40,7 @@ cp .env.example .env.local
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | **Performance** | Mobile + desktop Lighthouse score, FCP, LCP, TBT, CLS, Speed Index, and the top 5 improvement opportunities ranked by est. savings |
 | **SEO tags**    | `<title>` + length, meta description + length, `og:title`, `og:description`, `og:image`, canonical, `robots.txt`, `sitemap.xml`   |
-| **Images**      | Every `<img>`: missing `alt`, empty `alt`, missing `loading="lazy"`, missing `width`/`height`                                     |
+| **Images**      | Every `<img>`: missing `alt`, empty `alt`, missing `loading="lazy"`, missing `width`/`height`, plus a real file-size + format check (HEAD request) flagging heavy files and legacy JPEG/PNG/GIF that would benefit from WebP/AVIF |
 | **Links**       | Unique same-domain links, checked with `HEAD` (falling back to `GET`), flagging 4xx / 5xx / timeouts                              |
 
 Scores use Lighthouse's own thresholds — green ≥ 90, amber 50–89, red < 50.
@@ -96,7 +96,9 @@ downloaded twice.
 
 - **Single URL only** — no crawling. The link check only scans links found on that one page.
 - Internal links only, capped at 40 per audit, 8 concurrent, 10s timeout each.
-- Image checks are static analysis of the HTML; no image files are downloaded.
+- Image weight analysis is a `HEAD` request per unique image (file size + format
+  only), capped at 24 images per audit, 6 concurrent — no image bytes are
+  downloaded, no intrinsic-pixel-size vs. rendered-size comparison.
 - HTML is read up to a 3 MB cap.
 - The private-host guard is best effort; it does not re-resolve DNS, so it will
   not stop a deliberate DNS-rebinding attack. A public deployment should also run
@@ -108,8 +110,12 @@ Out of scope for this version. Plug-in points are marked with `FUTURE` comments
 in the code:
 
 - **Code audit** — unused CSS, minification, console errors ([lib/audit.ts](lib/audit.ts), [app/components/Report.tsx](app/components/Report.tsx))
-- **AI recommendations** — plain-English summary layer over the finished report ([lib/audit.ts](lib/audit.ts))
+- **AI recommendations** — plain-English summary layer over the finished report ([lib/audit.ts](lib/audit.ts)) — a per-issue version of this already exists via the "Recommended Fix" button on every section
 - **Whole-site crawling** ([lib/checks/links.ts](lib/checks/links.ts))
-- **Image weight analysis** — file size vs. rendered size, modern format hints ([lib/checks/images.ts](lib/checks/images.ts))
 - **User accounts / saved report history** — the first feature that would need a database
-- **PDF export** of the report
+
+Implemented since the original MVP:
+
+- **Recommended Fix** — an AI-generated fix (Gemini) for any flagged issue, available on every section (Performance is API-summary only, so it's the one section without a button)
+- **Image weight analysis** — real file size + format per image, flagging heavy files and legacy formats ([lib/checks/images.ts](lib/checks/images.ts))
+- **PDF export** — "Export PDF" on the report uses the browser's native print-to-PDF (`window.print()` + print stylesheet), so collapsed sections still print in full and no server-side rendering is needed

@@ -1,4 +1,5 @@
 import type { LinkResult, LinksReport, SectionResult } from "@/lib/types";
+import RecommendedFixButton from "./RecommendedFixButton";
 import { Card, EmptyNote, Pill } from "./ui";
 
 /** 4xx/5xx and network errors are red; a slow-but-alive redirect chain is fine. */
@@ -11,7 +12,7 @@ function statusLabel(link: LinkResult): { text: string; status: "pass" | "warn" 
   return { text: `${link.status} OK`, status: "pass" };
 }
 
-function LinkRow({ link }: { link: LinkResult }) {
+function LinkRow({ link, pageUrl, showFix = false }: { link: LinkResult; pageUrl: string; showFix?: boolean }) {
   const label = statusLabel(link);
   return (
     <tr className="align-top">
@@ -19,6 +20,18 @@ function LinkRow({ link }: { link: LinkResult }) {
         {link.url}
         {link.redirectedTo ? (
           <span className="block text-slate-400">→ {link.redirectedTo}</span>
+        ) : null}
+        {showFix ? (
+          <RecommendedFixButton
+            context={{
+              category: "Links",
+              label: "Broken internal link",
+              status: label.status,
+              detail: label.text,
+              value: link.url,
+              pageUrl,
+            }}
+          />
         ) : null}
       </td>
       <td className="py-2">
@@ -59,7 +72,7 @@ export default function LinksSection({ links, pageUrl }: { links: SectionResult<
                 <table className="w-full min-w-[32rem] text-left text-sm">
                   <tbody className="divide-y divide-slate-100">
                     {broken.map((link) => (
-                      <LinkRow key={link.url} link={link} />
+                      <LinkRow key={link.url} link={link} pageUrl={pageUrl} showFix />
                     ))}
                   </tbody>
                 </table>
@@ -74,7 +87,7 @@ export default function LinksSection({ links, pageUrl }: { links: SectionResult<
                 <table className="w-full min-w-[32rem] text-left text-sm">
                   <tbody className="divide-y divide-slate-100">
                     {report.results.map((link) => (
-                      <LinkRow key={link.url} link={link} />
+                      <LinkRow key={link.url} link={link} pageUrl={pageUrl} />
                     ))}
                   </tbody>
                 </table>

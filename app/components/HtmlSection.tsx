@@ -1,4 +1,5 @@
 import type { HtmlReport, SectionResult } from "@/lib/types";
+import RecommendedFixButton from "./RecommendedFixButton";
 import { Card, EmptyNote, Pill } from "./ui";
 
 export default function HtmlSection({
@@ -75,6 +76,15 @@ export default function HtmlSection({
               {report.issues.map((issue, index) => (
                 <li key={`${issue}-${index}`} className="text-sm text-amber-800">
                   • {issue}
+                  <RecommendedFixButton
+                    context={{
+                      category: "HTML Structure",
+                      label: "HTML structure issue",
+                      status: "fail",
+                      detail: issue,
+                      pageUrl,
+                    }}
+                  />
                 </li>
               ))}
             </ul>

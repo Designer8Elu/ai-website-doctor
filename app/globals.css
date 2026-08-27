@@ -50,3 +50,29 @@ body {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+
+/* Print / "Export PDF" (window.print) ------------------------------------ */
+@page {
+  margin: 12mm;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    background: #ffffff;
+  }
+
+  .glass {
+    background: #ffffff;
+    backdrop-filter: none;
+    border-color: #e2e8f0;
+  }
+
+  main {
+    background: #ffffff !important;
+  }
+}

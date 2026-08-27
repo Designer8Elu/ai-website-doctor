@@ -1,4 +1,5 @@
 import type { AccessibilityReport, SectionResult } from "@/lib/types";
+import RecommendedFixButton from "./RecommendedFixButton";
 import { Card, EmptyNote, Pill } from "./ui";
 
 export default function AccessibilitySection({
@@ -50,6 +51,19 @@ export default function AccessibilitySection({
                 <li key={`${issue.label}-${index}`} className="text-sm text-amber-800">
                   <p className="font-semibold">{issue.label}</p>
                   <p className="mt-1 text-sm text-amber-700">{issue.detail}</p>
+                  {issue.target ? (
+                    <p className="mt-1 break-all font-mono text-xs text-amber-600">{issue.target}</p>
+                  ) : null}
+                  <RecommendedFixButton
+                    context={{
+                      category: "Accessibility",
+                      label: issue.label,
+                      status: issue.status,
+                      detail: issue.detail,
+                      value: issue.target,
+                      pageUrl,
+                    }}
+                  />
                 </li>
               ))}
             </ul>

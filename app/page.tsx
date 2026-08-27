@@ -99,7 +99,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-slate-100 text-slate-900">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-10 sm:px-6 sm:py-14">
-        <div className="overflow-hidden rounded-[2rem] glass shadow-lg">
+        <div className="print:hidden overflow-hidden rounded-[2rem] glass shadow-lg">
           <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] p-8 sm:p-10">
             <div className="space-y-6">
               <span className="inline-flex items-center gap-2 rounded-full bg-violet-500/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-violet-500 ring-1 ring-violet-500/20">

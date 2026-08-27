@@ -102,7 +102,7 @@ async function runContentChecks(url: string): Promise<ContentBranch> {
   const [seo, contentSeo, images, links, accessibility, security, structuredData] = await Promise.allSettled([
     runSeoCheck($, baseUrl),
     Promise.resolve(runContentSeoQualityCheck($, baseUrl)),
-    Promise.resolve(runImageCheck($, baseUrl)),
+    runImageCheck($, baseUrl),
     runLinkCheck($, baseUrl),
     Promise.resolve(runAccessibilityCheck($)),
     Promise.resolve(runSecurityHeadersCheck(info.headers)),

@@ -95,7 +95,11 @@ function buildHierarchy(html: string) {
     if (!text) continue;
 
     if (previousLevel && level > previousLevel + 1) {
-      issues.push(`Heading structure jumps from H${previousLevel} to H${level}.`);
+      const suggestedLevel = previousLevel + 1;
+      const preview = text.length > 40 ? `${text.slice(0, 40)}…` : text;
+      issues.push(
+        `Heading structure jumps from H${previousLevel} to H${level} ("${preview}"). Use H${suggestedLevel} instead to keep the hierarchy sequential — don't skip levels.`,
+      );
     }
 
     hierarchy.push({ tag: tag.toUpperCase(), text, level });
